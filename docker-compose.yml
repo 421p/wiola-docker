@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:4
+  wiola:
+    build: .
+    ports:
+      - "7778:80"
+    depends_on:
+      - redis
