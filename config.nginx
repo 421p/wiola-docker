@@ -30,6 +30,9 @@ http {
                 port = 6379
             }
         })
+
+        local wflush = require "wiola.flushdb"
+        wflush.flushAll()
     }
 
     server {
@@ -42,21 +45,14 @@ http {
         root /usr/local/openresty/luajit/share/lua/5.1/wiola;
 
         location / {
-            return 404;
-        }
-
-        # example location for websocket WAMP connection
-        location /ws {
             set $wiola_socket_timeout 100;     # Optional parameter. Set the value to suit your needs
-            set $wiola_max_payload_len 65535; # Optional parameter. Set the value to suit your needs
+            set $wiola_max_payload_len __WIOLA_MAX_PAYLOAD_LEN__; # Optional parameter. Set the value to suit your needs
 
 
             lua_socket_log_errors off;
             lua_check_client_abort on;
 
-            # This is needed to set additional websocket protocol headers
             header_filter_by_lua_file $document_root/headers.lua;
-            # Set a handler for connection
             content_by_lua_file $document_root/handler.lua;
         }
     }

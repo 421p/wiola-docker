@@ -9,11 +9,12 @@ RUN apt-get update \
     && ./bootstrap \
     && make -j$(nproc) \
     && make install \
-    && /usr/local/openresty/luajit/bin/luarocks install wiola 0.6.1 \
+    && /usr/local/openresty/luajit/bin/luarocks install wiola 0.7.0-2 \
     && cd /tmp/cmake-3.9.1 && make uninstall \
     && rm -rf /tmp/cmake-3.9.1 \
     && apt-get purge -y git wget libssl-dev && apt-get autoremove -y
 
 ADD config.nginx /usr/local/openresty/nginx/conf/nginx.conf
+ADD startup.sh /usr/local/wiola/startup
 
-ENTRYPOINT ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/local/wiola/startup"]
