@@ -5,6 +5,7 @@ services:
     image: redis:4
   wiola:
     build: .
+    image: 421p/wiola:0.6.1
     ports:
       - "8080:80"
     depends_on:
