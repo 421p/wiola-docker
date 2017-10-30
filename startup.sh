@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 max_payload=${WIOLA_MAX_PAYLOAD_LEN:=65535}
 

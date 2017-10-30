@@ -1,18 +1,31 @@
-FROM openresty/openresty:jessie
+FROM openresty/openresty:alpine-fat
 
-RUN apt-get update \
-    && apt-get install -y git wget libssl-dev\
-    && cd /tmp \
-    && wget https://cmake.org/files/v3.9/cmake-3.9.1.tar.gz \
-    && tar xf cmake-3.9.1.tar.gz \
-    && cd cmake-3.9.1 \
-    && ./bootstrap \
-    && make -j$(nproc) \
-    && make install \
-    && /usr/local/openresty/luajit/bin/luarocks install wiola 0.7.0-2 \
-    && cd /tmp/cmake-3.9.1 && make uninstall \
-    && rm -rf /tmp/cmake-3.9.1 \
-    && apt-get purge -y git wget libssl-dev && apt-get autoremove -y
+ARG RESTY_LUAROCKS_VERSION="2.3.0"
+
+RUN apk add --no-cache --virtual .build-deps \
+            make \
+            gd-dev \
+            geoip-dev \
+            libxslt-dev \
+            perl-dev \
+            readline-dev \
+            zlib-dev \
+            git \
+            cmake \
+            openssl-dev \
+            build-base \
+            curl \
+            gd \
+            geoip \
+            libgcc \
+            libxslt \
+            linux-headers \
+            make \
+            perl \
+            unzip \
+            zlib \
+        && luarocks install wiola \
+        && apk del .build-deps
 
 ADD config.nginx /usr/local/openresty/nginx/conf/nginx.conf
 ADD startup.sh /usr/local/wiola/startup
