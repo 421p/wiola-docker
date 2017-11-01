@@ -4,7 +4,7 @@ services:
   redis:
     image: redis:4
   wiola:
-    image: 421p/wiola:0.7.0-2
+    image: 421p/wiola:0.8.0-SNAPSHOT
     ports:
       - "6666:80"
       - "7777:80"
